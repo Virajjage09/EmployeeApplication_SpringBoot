@@ -1,10 +1,18 @@
 package com.codervj.EmployeeApplication.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
 /**
  * Employee entity helps to keep record of an employee details which are fetched from
  * DataSource
  */
+@Entity
 public class Employee {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int employeeId;
     String employeeName;
     String employeeCity;

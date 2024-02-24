@@ -1,6 +1,8 @@
 package com.codervj.EmployeeApplication.services;
 
 import com.codervj.EmployeeApplication.entity.Employee;
+import com.codervj.EmployeeApplication.repository.EmployeeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -14,41 +16,26 @@ import java.util.List;
  */
 @Service
 public class EmployeeService {
-
-    List<Employee> employeeList = new ArrayList<>(Arrays.asList(
-            new Employee(1, "Viraj Jage", "Mumbai"),
-            new Employee(2, "Test User 1", "Pune"),
-            new Employee(3, "Test User 2", "Bengaluru"),
-            new Employee(4, "Test User 3", "Chennai")
-    ));
+    @Autowired
+    EmployeeRepository employeeRepository;
 
     public List<Employee> getAllEmployees() {
-        return employeeList;
+        return employeeRepository.findAll();
     }
 
     public Employee getEmployee(int id) {
-        return employeeList.stream().filter(employee ->
-                employee.getEmployeeId() == id
-        ).findFirst().get();
+        return employeeRepository.findById(id).orElse(null);
     }
 
     public void insertEmployee(Employee employee) {
-       employeeList.add(employee);
+        employeeRepository.save(employee);
     }
 
     public void updateEmployee(Employee employee) {
-        List<Employee> tempEmployeeList = new ArrayList<>();
-        for (Employee emp : employeeList) {
-            if (emp.getEmployeeId() == employee.getEmployeeId()) {
-                emp.setEmployeeName(employee.getEmployeeName());
-                emp.setEmployeeCity(employee.getEmployeeCity());
-            }
-            tempEmployeeList.add(emp);
-        }
-        this.employeeList = tempEmployeeList;
+        employeeRepository.save(employee);
     }
 
     public void deleteEmployee(int id) {
-        employeeList.removeIf(emp -> emp.getEmployeeId() == id);
+        employeeRepository.delete(employeeRepository.getReferenceById(id));
     }
 }

@@ -1,11 +1,13 @@
 package com.codervj.EmployeeApplication.controller;
 
 import com.codervj.EmployeeApplication.entity.Employee;
+import com.codervj.EmployeeApplication.excepetionhandling.ResourceNotFoundException;
 import com.codervj.EmployeeApplication.services.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -26,8 +28,12 @@ public class EmployeeController {
     }
 
     @RequestMapping("/employees/{id}")
-    public Employee findEmployee(@PathVariable int id) {
-        return employeeService.getEmployee(id);
+    public Employee findEmployee(@PathVariable int id) throws ResourceNotFoundException {
+        Employee employee = employeeService.getEmployee(id);
+        if (employee == null) {
+            throw new ResourceNotFoundException("Employee not found");
+        }
+        return employee;
     }
 
     @RequestMapping(value = "/employees", method = RequestMethod.POST)
