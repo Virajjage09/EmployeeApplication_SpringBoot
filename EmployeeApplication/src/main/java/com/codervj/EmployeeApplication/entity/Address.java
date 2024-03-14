@@ -1,5 +1,6 @@
 package com.codervj.EmployeeApplication.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 /**
@@ -22,8 +23,14 @@ public class Address {
     /**
      * Adding employee object to show Many to One mapping
      */
+    @JsonIgnore /* used to avoid endless address response while getting employee */
     @ManyToOne
     private Employee employee;
+
+    public Address() {
+
+    }
+
     public Address(String line1, String line2, String zipCode, String city, String state, String country) {
         this.line1 = line1;
         this.line2 = line2;

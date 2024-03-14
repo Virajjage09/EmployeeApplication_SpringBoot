@@ -18,21 +18,39 @@ public class Employee {
 
     /**
      * One to One mapping between Employee and Spouse
+     *
+     * CascadeType.ALL used to insert respective data of spouse along with employee
+     *
+     * CascadeType.PERSIST used to only insert respective data of spouse along with employee not delete
+     *
+     * CascadeType.REMOVE used to only remove respective data of spouse along with employee not insert
      */
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_spouse")
     private Spouse spouse;
 
     /**
      * One to Many mapping between Employee and Address
+     *
+     * CascadeType.ALL used to insert respective data of address along with employee
+     *
+     * CascadeType.PERSIST used to only insert respective data of address along with employee not delete
+     *
+     * CascadeType.REMOVE used to only remove respective data of address along with employee not insert
      */
-    @OneToMany
+    @OneToMany(cascade = CascadeType.PERSIST)
     private List<Address> addresses;
 
     /**
      * Many to Many mapping between Employee and Project
+     *
+     * CascadeType.ALL used to insert respective data of projects along with employee
+     *
+     * CascadeType.PERSIST used to only insert respective data of projects along with employee not delete
+     *
+     * CascadeType.REMOVE used to only remove respective data of project along with employee not insert
      */
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinTable(name = "employee_project",
             joinColumns = @JoinColumn(name = "fk_employee"),
             inverseJoinColumns = @JoinColumn(name = "fk_project"))

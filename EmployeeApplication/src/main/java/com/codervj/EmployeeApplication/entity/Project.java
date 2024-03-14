@@ -1,5 +1,6 @@
 package com.codervj.EmployeeApplication.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,8 +18,14 @@ public class Project{
     /**
      * Adding employee object to implement Many to Many mapping
      */
+    @JsonIgnore /* used to avoid endless project response while getting employee */
     @ManyToMany(mappedBy = "projects")
     private List<Employee> employee;
+
+    public Project() {
+
+    }
+
     public Project(String name, String clientName) {
         this.name = name;
         this.clientName = clientName;
