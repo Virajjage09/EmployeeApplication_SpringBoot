@@ -1,9 +1,8 @@
 package com.codervj.EmployeeApplication.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 /**
  * Employee entity helps to keep record of an employee details which are fetched from
@@ -17,9 +16,32 @@ public class Employee {
     String employeeName;
     String employeeCity;
 
+    /**
+     * One to One mapping between Employee and Spouse
+     */
+    @OneToOne
+    @JoinColumn(name = "fk_spouse")
+    private Spouse spouse;
+
+    /**
+     * One to Many mapping between Employee and Address
+     */
+    @OneToMany
+    private List<Address> addresses;
+
+    /**
+     * Many to Many mapping between Employee and Project
+     */
+    @ManyToMany
+    @JoinTable(name = "employee_project",
+            joinColumns = @JoinColumn(name = "fk_employee"),
+            inverseJoinColumns = @JoinColumn(name = "fk_project"))
+    private List<Project> projects;
+
     public Employee() {
 
     }
+
     public Employee(int employeeId, String employeeName, String employeeCity) {
         this.employeeId = employeeId;
         this.employeeName = employeeName;
@@ -48,5 +70,39 @@ public class Employee {
 
     public void setEmployeeCity(String employeeCity) {
         this.employeeCity = employeeCity;
+    }
+
+    public Spouse getSpouse() {
+        return spouse;
+    }
+
+    public void setSpouse(Spouse spouse) {
+        this.spouse = spouse;
+    }
+
+    public List<Address> getAddresses() {
+        return addresses;
+    }
+
+    public void setAddresses(List<Address> addresses) {
+        this.addresses = addresses;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
+
+    public void removeProject(Project project) {
+        this.projects.remove(project);
+        project.getEmployee().remove(this);
+    }
+
+    public void addProject(Project project) {
+        this.projects.add(project);
+        project.getEmployee().add(this);
     }
 }
